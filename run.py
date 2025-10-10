@@ -12,7 +12,6 @@ import pathlib
 def LOG(log):
     print("[RUN]:    - " + log + " -")
     
-    
 def start():
     choices = [
         "[ commands ]",
@@ -29,6 +28,12 @@ def start():
     inp = str(input(">>>   Run command: "))
     print("")
     input_resolver(inp)
+
+def run_program(change_to_build_dir = True):
+    if(change_to_build_dir):
+        os.chdir("build")
+    run_cmd = "classy.exe"
+    subprocess.run(run_cmd, shell=True)
 
 def build(with_cmake=True, clean = True, debug = False):
     cwd = os.getcwd()
@@ -104,6 +109,14 @@ def input_resolver(input_):
         delete_folder(build_folder)
         os.makedirs("build")
         build()
+    if(input_ == "2"):
+        delete_folder(build_folder)
+    if(input_ == "3"):
+        delete_folder(build_folder)
+    if(input_ == "4"):
+        build(with_cmake=False, clean = False)
+        run_program(False)
+
 
 # main function
 if __name__ == "__main__":

@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.27.7)
 include(cmake/macros.cmake) # include macros in a separate cmake file macros.cmake
 
+option(BUILD_UNIT_TESTS "Build unit tests." OFF)
 LOGTHIS("Starting the main CMakeLists")
 
-### including gcc options
-include(cmake/gcc_options.cmake)
+# ## including gcc options
+include(cmake/gcc_option.cmake)
 
 # project setup.
 set(project_name classy)
@@ -43,5 +44,5 @@ add_custom_command(TARGET ${project_name} POST_BUILD
 
 target_link_libraries(
     ${project_name}
-    main
+    main_cpp
 )
