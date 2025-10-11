@@ -61,7 +61,7 @@ def run_cmake(clean = True, debug = False):
 def run_make():
     LOG("make running...")
     # make_cmd = "VERBOSE=1 make"
-    make_cmd = "make"
+    make_cmd = "cmake --build ."
     subprocess.run(make_cmd, shell=True)
 
 ### Folder ###
@@ -112,7 +112,7 @@ def input_resolver(input_):
     if(input_ == "2"):
         delete_folder(build_folder)
     if(input_ == "3"):
-        delete_folder(build_folder)
+        run_program(True)
     if(input_ == "4"):
         build(with_cmake=False, clean = False)
         run_program(False)
