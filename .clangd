@@ -1,0 +1,12 @@
+CompileFlags:
+  # CMake writes compile_commands.json here on every configure.
+  CompilationDatabase: build
+  Add:
+    - -std=c++17
+
+Index:
+  Background: Build
+
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
