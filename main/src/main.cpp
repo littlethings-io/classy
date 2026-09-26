@@ -1,7 +1,6 @@
-#include <iostream>
+#include "modules_main.hpp"
 
-int main(int argc, char *argv[])
+int main()
 {
-    std::cout << "Hello Oliver!" << std::endl;
-    return 0;
+    return modules_main::Run();
 }

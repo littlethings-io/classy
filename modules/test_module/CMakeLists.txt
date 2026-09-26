@@ -1,0 +1,1 @@
+add_classy_module(test_module)
