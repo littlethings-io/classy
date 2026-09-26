@@ -22,6 +22,28 @@ function(add_classy_module module_name)
     endif()
 
     set_property(GLOBAL APPEND PROPERTY CLASSY_MODULE_TARGETS ${module_name})
+
+    if(BUILD_UNIT_TESTS)
+        file(GLOB_RECURSE module_test_sources CONFIGURE_DEPENDS
+            "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cc"
+            "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cxx"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cc"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cxx"
+        )
+
+        if(module_test_sources)
+            set(test_target "${module_name}_tests")
+            add_executable(${test_target} ${module_test_sources})
+            target_link_libraries(${test_target}
+                PRIVATE ${module_name} GTest::gtest_main
+            )
+            target_compile_features(${test_target} PRIVATE cxx_std_17)
+            gtest_discover_tests(${test_target})
+            set_property(GLOBAL APPEND PROPERTY CLASSY_TEST_TARGETS ${test_target})
+        endif()
+    endif()
 endfunction()
 
 # Any direct child with a CMakeLists.txt is a module. CMake re-checks this glob
