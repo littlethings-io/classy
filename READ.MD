@@ -37,21 +37,30 @@ The script displays this menu:
 
 The commands do the following:
 
-- **Clean build** deletes the existing `build` folder and builds everything
-  again.
+- **Clean build** deletes `build/build-app` and rebuilds the application without
+  touching the unit-test build.
 - **Build** configures CMake and performs an incremental build.
 - **Build and run** builds the project and then starts `classy.exe`.
 - **Run** starts the previously built `classy.exe` without rebuilding it.
-- **Delete build folder** removes all generated build files.
-- **Run all Google tests** enables unit tests, builds them, and runs every
-  discovered GoogleTest through CTest.
-- **Run test target** enables and builds unit tests, then runs CMake's `test`
-  target.
+- **Delete build folder** removes both generated build trees.
+- **Run all Google tests** uses the separate test tree to build only the unit
+  tests, then runs every discovered GoogleTest through CTest.
+- **Run test target** builds only the unit tests in the separate test tree,
+  then runs CMake's `test` target.
 
 The generated program is placed at:
 
 ```text
-build/classy.exe
+build/build-app/classy.exe
+```
+
+Application and test builds use separate folders so switching between them is
+fast and does not reconfigure or overwrite the other build:
+
+```text
+build/
+├── build-app/
+└── build-tests/
 ```
 
 ## Project entry point
@@ -166,5 +175,6 @@ run the tests.
 ## Editor support
 
 The project includes `.clangd` and `.clang-format` configuration files. CMake
-generates `build/compile_commands.json` during a build, allowing clangd-aware
-editors to find the project headers and understand the build configuration.
+generates `build/build-app/compile_commands.json` during an application build,
+allowing clangd-aware editors to find the project headers and understand the
+build configuration.

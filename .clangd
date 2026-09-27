@@ -1,6 +1,6 @@
 CompileFlags:
   # CMake writes compile_commands.json here on every configure.
-  CompilationDatabase: build
+  CompilationDatabase: build/build-app
   Add:
     - -std=c++20
 

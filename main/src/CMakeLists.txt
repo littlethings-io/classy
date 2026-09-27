@@ -6,7 +6,7 @@ endif()
 
 target_link_libraries(classy PRIVATE modules_main)
 
-# Keep the executable in build/ for a predictable run.py path.
+# Keep the executable at the root of the selected CMake build tree.
 set_target_properties(classy PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
 )

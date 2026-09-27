@@ -24,4 +24,10 @@ endif()
 
 # Modules are added before the application so their targets are available to it.
 add_subdirectory(modules)
+
+if(BUILD_UNIT_TESTS)
+    get_property(classy_test_targets GLOBAL PROPERTY CLASSY_TEST_TARGETS)
+    add_custom_target(unit_tests DEPENDS ${classy_test_targets})
+endif()
+
 add_subdirectory(main)

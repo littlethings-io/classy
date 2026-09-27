@@ -6,7 +6,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent
-BUILD_DIR = ROOT / "build"
+BUILD_ROOT = ROOT / "build"
+APP_BUILD_DIR = BUILD_ROOT / "build-app"
+TEST_BUILD_DIR = BUILD_ROOT / "build-tests"
 TOOLCHAIN_BIN = ROOT / "compiler" / "mingw64" / "bin"
 C_COMPILER = TOOLCHAIN_BIN / "gcc.exe"
 CXX_COMPILER = TOOLCHAIN_BIN / "g++.exe"
@@ -58,16 +60,17 @@ def run_command(command: list[str]) -> None:
     subprocess.run(command, cwd=ROOT, env=tool_environment(), check=True)
 
 
-def configure(build_unit_tests: bool = False) -> Path:
+def configure(build_unit_tests: bool = False) -> tuple[Path, Path]:
     verify_tools()
     cmake = find_cmake()
+    build_dir = TEST_BUILD_DIR if build_unit_tests else APP_BUILD_DIR
     run_command(
         [
             str(cmake),
             "-S",
             str(ROOT),
             "-B",
-            str(BUILD_DIR),
+            str(build_dir),
             "-G",
             "MinGW Makefiles",
             "-DCMAKE_BUILD_TYPE=Release",
@@ -78,30 +81,41 @@ def configure(build_unit_tests: bool = False) -> Path:
             f"-DCMAKE_MAKE_PROGRAM={MAKE_PROGRAM}",
         ]
     )
-    return cmake
+    return cmake, build_dir
 
 
-def build(build_unit_tests: bool = False) -> Path:
-    cmake = configure(build_unit_tests)
-    run_command([str(cmake), "--build", str(BUILD_DIR), "--parallel"])
-    return cmake
+def build(build_unit_tests: bool = False) -> tuple[Path, Path]:
+    cmake, build_dir = configure(build_unit_tests)
+    build_command = [str(cmake), "--build", str(build_dir), "--parallel"]
+    if build_unit_tests:
+        build_command.extend(["--target", "unit_tests"])
+    run_command(build_command)
+    return cmake, build_dir
+
+
+def delete_app_build_folder() -> None:
+    if APP_BUILD_DIR.exists():
+        shutil.rmtree(APP_BUILD_DIR)
+        log("Deleted app build folder.")
+    else:
+        log("App build folder does not exist.")
 
 
 def delete_build_folder() -> None:
-    if BUILD_DIR.exists():
-        shutil.rmtree(BUILD_DIR)
+    if BUILD_ROOT.exists():
+        shutil.rmtree(BUILD_ROOT)
         log("Deleted build folder.")
     else:
         log("Build folder does not exist.")
 
 
 def clean_build() -> None:
-    delete_build_folder()
+    delete_app_build_folder()
     build()
 
 
 def run_program() -> None:
-    executable = BUILD_DIR / "classy.exe"
+    executable = APP_BUILD_DIR / "classy.exe"
     if not executable.is_file():
         raise FileNotFoundError("classy.exe was not found. Build the project first.")
     run_command([str(executable)])
@@ -112,21 +126,21 @@ def build_and_run() -> None:
     run_program()
 
 
-def build_unit_tests() -> Path:
+def build_unit_tests() -> tuple[Path, Path]:
     return build(build_unit_tests=True)
 
 
 def run_all_google_tests() -> None:
-    cmake = build_unit_tests()
+    cmake, build_dir = build_unit_tests()
     ctest = cmake.with_name("ctest.exe")
     if not ctest.is_file():
         raise FileNotFoundError(f"CTest was not found beside CMake: {ctest}")
-    run_command([str(ctest), "--test-dir", str(BUILD_DIR), "--output-on-failure"])
+    run_command([str(ctest), "--test-dir", str(build_dir), "--output-on-failure"])
 
 
 def run_test_target() -> None:
-    cmake = build_unit_tests()
-    run_command([str(cmake), "--build", str(BUILD_DIR), "--target", "test"])
+    cmake, build_dir = build_unit_tests()
+    run_command([str(cmake), "--build", str(build_dir), "--target", "test"])
 
 
 ACTIONS = {
