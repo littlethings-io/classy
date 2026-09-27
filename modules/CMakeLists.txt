@@ -12,7 +12,7 @@ function(add_classy_module module_name)
         target_include_directories(${module_name}
             PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/inc"
         )
-        target_compile_features(${module_name} PUBLIC cxx_std_17)
+        target_compile_features(${module_name} PUBLIC cxx_std_20)
     else()
         # Empty starter modules remain valid until their first source is added.
         add_library(${module_name} INTERFACE)
@@ -39,7 +39,7 @@ function(add_classy_module module_name)
             target_link_libraries(${test_target}
                 PRIVATE ${module_name} GTest::gtest_main
             )
-            target_compile_features(${test_target} PRIVATE cxx_std_17)
+            target_compile_features(${test_target} PRIVATE cxx_std_20)
             gtest_discover_tests(${test_target})
             set_property(GLOBAL APPEND PROPERTY CLASSY_TEST_TARGETS ${test_target})
         endif()

@@ -2,7 +2,7 @@ CompileFlags:
   # CMake writes compile_commands.json here on every configure.
   CompilationDatabase: build
   Add:
-    - -std=c++17
+    - -std=c++20
 
 Index:
   Background: Build
