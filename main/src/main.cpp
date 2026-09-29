@@ -2,5 +2,5 @@
 
 int main()
 {
-    return modules_main::Run();
+    return cc::Run();
 }

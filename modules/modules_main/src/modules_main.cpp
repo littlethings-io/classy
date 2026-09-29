@@ -1,12 +1,14 @@
 #include "modules_main.hpp"
+#include "test_module.hpp"
 
 #include <iostream>
 
-namespace modules_main
+namespace cc
 {
 int Run()
 {
-    std::cout << "Hello!" << std::endl;
+    A a;
+    a.Print();
     return 0;
 }
 }

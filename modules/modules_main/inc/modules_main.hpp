@@ -1,6 +1,6 @@
 #pragma once
 
-namespace modules_main
+namespace cc
 {
 int Run();
 }
