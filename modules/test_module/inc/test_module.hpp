@@ -1,16 +1,13 @@
 #pragma once
-#include <iostream>
+#include <string>
+#include <stdio.h>
 
 namespace cc {
-// static typing
-// built-in types
-// user-defined types
-// class
-// state + behavior + lifetime + access
-// constructor / ~destructor
+// Pointer / ref / 
+// Deref- af pointer
+// this
 
-class A {
-    public:
-    void Print() {std::cout << "hello" << std::endl;}
+class Player {
+    
 };
 }
