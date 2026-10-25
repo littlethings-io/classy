@@ -7,8 +7,6 @@ namespace cc
 {
 int Run()
 {
-    A a;
-    a.Print();
     return 0;
 }
 }
