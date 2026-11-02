@@ -5,10 +5,17 @@
 
 namespace cc
 {
+
+
+void test_matrix() {
+}
+
+
 int Run()
 {
-    A a;
-    a.Print();
+    std::cout << "Begin test_matrix" << "\n";
+    test_matrix();
+    std::cout << "**************************" << "\n\n";
     return 0;
 }
 }
